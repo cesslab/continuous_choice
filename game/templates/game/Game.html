@@ -24,7 +24,7 @@
 {#    </div>#}
 
     <div>
-        <h2><span>Seconds Remaining - </span><span id="ttext">60</span></h2>
+        <h2><span>Seconds Remaining - </span><span id="ttext"></span></h2>
     </div>
 
     <table class="table table-bordered">
@@ -57,7 +57,7 @@
     </div>
 
     <div>
-        <button id="next-button" class="otree-btn-next btn btn-dark d-none" onclick="addB()">Next</button>
+        <button id="next-button" class="otree-btn-next btn btn-dark d-none" onclick="addB()">Continue</button>
     </div>
 
 {% endblock %}
@@ -69,13 +69,15 @@
       let timeElement = document.getElementById('ttext');
       const intervalId = setInterval(() => {
           counter += 1;
-          let seconds = timeSeconds - (counter % 60);
+          let seconds = timeSeconds - counter;
           timeElement.textContent = `${seconds}`;
           console.log(counter);
-          if (counter === 60) {
-              document.getElementById('a-btn').addClass('d-none');
-              document.getElementById('b-btn').addClass('d-none');
-              document.getElementById('next-button').removeClass('d-none');
+          if (counter === timeSeconds) {
+              document.getElementById('a-btn').classList.remove('d-inline');
+              document.getElementById('a-btn').classList.add('d-none');
+              document.getElementById('b-btn').classList.remove('d-inline');
+              document.getElementById('b-btn').classList.add('d-none');
+              document.getElementById('next-button').classList.remove('d-none');
               clearInterval(intervalId);
           }
       }, 1000);
