@@ -9,78 +9,113 @@
 {% endblock %}
 
 {% block content %}
-{#    <div class="progress">#}
-{#     <div class="progress-bar bg-white" role="progressbar" style="width:40%">#}
-{#      </div>#}
-{#      <div class="progress-bar bg-primary" role="progressbar" style="width:10%">#}
-{#          A#}
-{#      </div>#}
-{#      <div class="progress-bar bg-success" role="progressbar" style="width:20%">#}
-{#          B#}
-{#      </div>#}
-{#        <div class="progress-bar bg-primary" role="progressbar" style="width:10%">#}
-{#            A#}
-{#        </div>#}
-{#    </div>#}
-
-    <div>
-        <h2><span>Seconds Remaining - </span><span id="ttext"></span></h2>
-    </div>
-
-    <table class="table table-bordered">
-    <thead>
-        <tr>
-            <th></th>
-            <th>A</th>
-            <th>B</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <th scope="row">A</th>
-            <td>a, a</td>
-            <td>a, b</td>
-        </tr>
-        <tr>
-            <th scope="row">B</th>
-            <td>b, a</td>
-            <td>b, b</td>
-        </tr>
-    </tbody>
-    </table>
-
-    <textarea class="d-none"></textarea>
-
-    <div>
-        <button id="a-btn" class="btn btn-primary d-inline" onclick="addA()">A</button>
-        <button id="b-btn" class="btn btn-success d-inline">B</button>
+    <div id="progbar" class="progress">
+     <div class="progress-bar bg-white" id="bid-0" role="progressbar">
+      </div>
     </div>
 
     <div>
-        <button id="next-button" class="otree-btn-next btn btn-dark d-none" onclick="addB()">Continue</button>
+        <h2><span>Seconds Remaining - </span><span id="ttext">60</span></h2>
+    </div>
+
+    <div>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th></th>
+                <th>A</th>
+                <th>B</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th scope="row">A</th>
+                <td>a, a</td>
+                <td>a, b</td>
+            </tr>
+            <tr>
+                <th scope="row">B</th>
+                <td>b, a</td>
+                <td>b, b</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div><h3 class="d-inline">Current Choice: </h3><h3 class="d-inline" id="strategy"></h3></div>
+
+    <div>
+        <button id="a-btn" type="button" class="btn btn-primary d-inline" onclick="addChoice('A')">A</button>
+        <button id="b-btn" type="button" class="btn btn-success d-inline" onclick="addChoice('B')">B</button>
+    </div>
+
+    <div>
+        <button id="next-button" class="otree-btn-next btn btn-dark d-none">Continue</button>
     </div>
 
 {% endblock %}
 {% block scripts %}
     <script>
-    $(function() {
-      let counter = 0;
-      let timeSeconds = 60;
-      let timeElement = document.getElementById('ttext');
-      const intervalId = setInterval(() => {
-          counter += 1;
-          let seconds = timeSeconds - counter;
-          timeElement.textContent = `${seconds}`;
-          console.log(counter);
-          if (counter === timeSeconds) {
-              document.getElementById('a-btn').classList.remove('d-inline');
-              document.getElementById('a-btn').classList.add('d-none');
-              document.getElementById('b-btn').classList.remove('d-inline');
-              document.getElementById('b-btn').classList.add('d-none');
-              document.getElementById('next-button').classList.remove('d-none');
-              clearInterval(intervalId);
-          }
-      }, 1000);
-    });
+        let counter = 0;
+        let timeSeconds = 60;
+        let startTime = 0;
+        let endTime = 0;
+        let choices = [];
+        let currentStrategy = '';
+        let barPercent = 0;
+        let barId = 0;
+
+        function addChoice(strat) {
+            let currentTime = new Date().getTime();
+
+            if (currentStrategy === strat) {
+                return;
+            }
+            currentStrategy = strat;
+
+            let strategyLabel = document.getElementById('strategy');
+            strategyLabel.textContent = currentStrategy;
+
+            barId += 1;
+            barPercent = 0;
+            let progressBar = document.getElementById('progbar');
+            let colorClass = currentStrategy === 'A' ? 'bg-primary': 'bg-success';
+            let htmlText = `<div id="bid-${barId}" class="progress-bar ${colorClass}" role="progressbar" style="width:0%"></div>`;
+            progressBar.insertAdjacentHTML('beforeend', htmlText);
+
+            choices.push({strategy: currentStrategy, time: currentTime});
+            console.log(choices)
+        }
+
+        $(document).ready(function() {
+            let timeElement = document.getElementById('ttext');
+            const intervalId = setInterval(() => {
+                if (counter === 0)
+                    startTime = new Date().getTime();
+
+                counter += 1;
+                let seconds = timeSeconds - counter;
+                timeElement.textContent = `${seconds}`;
+
+                barPercent += 1;
+                let progressBar = document.getElementById(`bid-${barId}`);
+                console.log(progressBar);
+                progressBar.setAttribute('style', `width:${barPercent}%;`);
+
+                if (counter === timeSeconds) {
+                  document.getElementById('a-btn').classList.remove('d-inline');
+                  document.getElementById('a-btn').classList.add('d-none');
+                  document.getElementById('b-btn').classList.remove('d-inline');
+                  document.getElementById('b-btn').classList.add('d-none');
+                  document.getElementById('next-button').classList.remove('d-none');
+
+                  endTime = new Date().getTime();
+
+                  clearInterval(intervalId);
+                }
+            }, 1000);
+        }
+    );
+
 </script>
 {% endblock %}
