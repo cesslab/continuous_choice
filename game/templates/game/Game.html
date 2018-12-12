@@ -50,20 +50,32 @@
     </div>
 
     <div>
-        <button id="next-button" class="otree-btn-next btn btn-dark d-none">Continue</button>
+        <button id="next-button" class="otree-btn-next btn btn-dark d-none" onclick="addStrategy()">Continue</button>
     </div>
+    <div>
+        <input type="hidden" id="strategies" name="strategies">
+        <input type="hidden" id="strategy" name="strategy">
+    </div>
+    <div>{{ form.errors }}</div>
 
 {% endblock %}
 {% block scripts %}
     <script>
-        let counter = 0;
-        let timeSeconds = 60;
+        // TODO: Add chart displaying percentages of time allocated to a given strategy (chart.js)
+        let loopTimeMilliseconds = 100;
+        let millisecondCounter = 0;
+        let timeGivenMilliseconds = 60 * 1000;
+        let progressBarCounter = 0;
         let startTime = 0;
         let endTime = 0;
         let choices = [];
         let currentStrategy = '';
-        let barPercent = 0;
         let barId = 0;
+
+        function addStrategy() {
+            document.getElementById("strategies").value = JSON.stringify(choices);
+            document.getElementById("strategy").value = currentStrategy;
+        }
 
         function addChoice(strat) {
             let currentTime = new Date().getTime();
@@ -72,37 +84,39 @@
                 return;
             }
             currentStrategy = strat;
+            barId += 1;
+            progressBarCounter = 0;
 
             let strategyLabel = document.getElementById('strategy');
             strategyLabel.textContent = currentStrategy;
-
-            barId += 1;
-            barPercent = 0;
-            let progressBar = document.getElementById('progbar');
-            let colorClass = currentStrategy === 'A' ? 'bg-primary': 'bg-success';
-            let htmlText = `<div id="bid-${barId}" class="progress-bar ${colorClass}" role="progressbar" style="width:0%"></div>`;
-            progressBar.insertAdjacentHTML('beforeend', htmlText);
-
             choices.push({strategy: currentStrategy, time: currentTime});
-            console.log(choices)
         }
 
         $(document).ready(function() {
             let timeElement = document.getElementById('ttext');
             const intervalId = setInterval(() => {
-                if (counter === 0)
+                if (millisecondCounter === 0)
                     startTime = new Date().getTime();
 
-                counter += 1;
-                let seconds = timeSeconds - counter;
+                millisecondCounter += 100;
+                let seconds = Math.floor((timeGivenMilliseconds - millisecondCounter)/ 1000);
                 timeElement.textContent = `${seconds}`;
 
-                barPercent += 1;
                 let progressBar = document.getElementById(`bid-${barId}`);
-                console.log(progressBar);
-                progressBar.setAttribute('style', `width:${barPercent}%;`);
+                if (progressBarCounter === 0) {
+                    progressBarCounter += 100;
+                    let progressBar = document.getElementById('progbar');
+                    let colorClass = currentStrategy === 'A' ? 'bg-primary': 'bg-success';
+                    let htmlText = `<div id="bid-${barId}" class="progress-bar ${colorClass}" role="progressbar" style="width: 0%"></div>`;
+                    progressBar.insertAdjacentHTML('beforeend', htmlText);
+                }
+                else {
+                    progressBarCounter += 100;
+                    barPercent = ( progressBarCounter / timeGivenMilliseconds) * 100;
+                    progressBar.setAttribute('style', `width:${barPercent}%;`);
+                }
 
-                if (counter === timeSeconds) {
+                if (millisecondCounter === timeGivenMilliseconds) {
                   document.getElementById('a-btn').classList.remove('d-inline');
                   document.getElementById('a-btn').classList.add('d-none');
                   document.getElementById('b-btn').classList.remove('d-inline');
@@ -113,7 +127,7 @@
 
                   clearInterval(intervalId);
                 }
-            }, 1000);
+            }, loopTimeMilliseconds);
         }
     );
 

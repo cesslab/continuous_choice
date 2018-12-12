@@ -4,7 +4,8 @@ from .models import Constants
 
 
 class Game(Page):
-    pass
+    form_model = 'player'
+    form_fields = ['strategies', 'strategy']
 
 
 class Results(Page):

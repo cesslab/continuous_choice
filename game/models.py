@@ -26,4 +26,5 @@ class Group(BaseGroup):
 
 
 class Player(BasePlayer):
-    pass
+    strategies = models.LongStringField()
+    strategy = models.StringField()
