@@ -9,59 +9,68 @@
 {% endblock %}
 
 {% block content %}
-    <div id="progbar" class="progress">
-     <div class="progress-bar bg-white" id="bid-0" role="progressbar">
-      </div>
-    </div>
+    <div class="grid-container">
+        <div>
+            <h3><span>Seconds Remaining: </span><span id="ttext">60</span></h3>
+        </div>
 
-    <div>
-        <h2><span>Seconds Remaining - </span><span id="ttext">60</span></h2>
-    </div>
+        <div><h3 class="d-inline">Current Choice: </h3><h3 class="d-inline" id="strategy-choice"></h3></div>
+        <div id="progbar" class="progress">
+            <div class="progress-bar bg-white" id="bid-0" role="progressbar">
+            </div>
+        </div>
 
-    <div>
-        <table class="table table-bordered">
-            <thead>
-            <tr>
-                <th></th>
-                <th>A</th>
-                <th>B</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <th scope="row">A</th>
-                <td>a, a</td>
-                <td>a, b</td>
-            </tr>
-            <tr>
-                <th scope="row">B</th>
-                <td>b, a</td>
-                <td>b, b</td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+        <div class="game-container">
+            <div class="align-middle">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>A</th>
+                        <th>B</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th scope="row">A</th>
+                        <td>a, a</td>
+                        <td>a, b</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">B</th>
+                        <td>b, a</td>
+                        <td>b, b</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div id="chartContainer" class="d-none">
+                <canvas id="myChart"></canvas>
+            </div>
+        </div>
 
-    <div><h3 class="d-inline">Current Choice: </h3><h3 class="d-inline" id="strategy"></h3></div>
+        <div>
+            <button id="a-btn" type="button" class="btn btn-primary d-inline custom-button" onclick="addChoice('A')">A</button>
+            <button id="b-btn" type="button" class="btn btn-success d-inline custom-button" onclick="addChoice('B')">B</button>
+        </div>
 
-    <div>
-        <button id="a-btn" type="button" class="btn btn-primary d-inline" onclick="addChoice('A')">A</button>
-        <button id="b-btn" type="button" class="btn btn-success d-inline" onclick="addChoice('B')">B</button>
-    </div>
+        <div>
+            <button id="next-button" class="otree-btn-next btn btn-dark d-none">Continue</button>
+        </div>
+        <div>
+            <input type="hidden" id="strategies" name="strategies">
+            <input type="hidden" id="strategy" name="strategy">
+            <input type="hidden" id="start-time" name="start">
+            <input type="hidden" id="end-time" name="end">
+        </div>
+        <div>{{ form.errors }}</div>
 
-    <div>
-        <button id="next-button" class="otree-btn-next btn btn-dark d-none" onclick="addStrategy()">Continue</button>
     </div>
-    <div>
-        <input type="hidden" id="strategies" name="strategies">
-        <input type="hidden" id="strategy" name="strategy">
-    </div>
-    <div>{{ form.errors }}</div>
 
 {% endblock %}
 {% block scripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.js"></script>
     <script>
-        // TODO: Add chart displaying percentages of time allocated to a given strategy (chart.js)
         let loopTimeMilliseconds = 100;
         let millisecondCounter = 0;
         let timeGivenMilliseconds = 60 * 1000;
@@ -69,13 +78,25 @@
         let startTime = 0;
         let endTime = 0;
         let choices = [];
-        let currentStrategy = '';
+        let currentStrategy = 'None';
         let barId = 0;
 
-        function addStrategy() {
-            document.getElementById("strategies").value = JSON.stringify(choices);
-            document.getElementById("strategy").value = currentStrategy;
-        }
+        var ctx = document.getElementById("myChart").getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ["None", "A", "B"],
+                datasets: [{
+                    backgroundColor: [
+                        "#ffffff",
+                        "#007bff",
+                        "#28a745",
+                    ],
+                    data: [0,0,0],
+                    borderColor: ['grey', 'grey', 'grey']
+                }]
+            }
+        });
 
         function addChoice(strat) {
             let currentTime = new Date().getTime();
@@ -87,7 +108,7 @@
             barId += 1;
             progressBarCounter = 0;
 
-            let strategyLabel = document.getElementById('strategy');
+            let strategyLabel = document.getElementById('strategy-choice');
             strategyLabel.textContent = currentStrategy;
             choices.push({strategy: currentStrategy, time: currentTime});
         }
@@ -98,12 +119,8 @@
                 if (millisecondCounter === 0)
                     startTime = new Date().getTime();
 
-                millisecondCounter += 100;
-                let seconds = Math.floor((timeGivenMilliseconds - millisecondCounter)/ 1000);
-                timeElement.textContent = `${seconds}`;
-
                 let progressBar = document.getElementById(`bid-${barId}`);
-                if (progressBarCounter === 0) {
+                if (progressBarCounter === 0 && currentStrategy !== 'None') {
                     progressBarCounter += 100;
                     let progressBar = document.getElementById('progbar');
                     let colorClass = currentStrategy === 'A' ? 'bg-primary': 'bg-success';
@@ -116,16 +133,37 @@
                     progressBar.setAttribute('style', `width:${barPercent}%;`);
                 }
 
+                millisecondCounter += 100;
+                let seconds = Math.floor((timeGivenMilliseconds - millisecondCounter)/ 1000);
+                timeElement.textContent = `${seconds}`;
+
+                if (currentStrategy === 'None') {
+                    myChart.data.datasets[0].data[0] += 100;
+                }
+                else if (currentStrategy === 'A') {
+                    myChart.data.datasets[0].data[1] += 100;
+                }
+                else {
+                    myChart.data.datasets[0].data[2] += 100;
+                }
+                myChart.update();
+
                 if (millisecondCounter === timeGivenMilliseconds) {
-                  document.getElementById('a-btn').classList.remove('d-inline');
-                  document.getElementById('a-btn').classList.add('d-none');
-                  document.getElementById('b-btn').classList.remove('d-inline');
-                  document.getElementById('b-btn').classList.add('d-none');
-                  document.getElementById('next-button').classList.remove('d-none');
+                    document.getElementById('a-btn').classList.remove('d-inline');
+                    document.getElementById('a-btn').classList.add('d-none');
+                    document.getElementById('b-btn').classList.remove('d-inline');
+                    document.getElementById('b-btn').classList.add('d-none');
+                    document.getElementById('chartContainer').classList.remove('d-none');
+                    document.getElementById('next-button').classList.remove('d-none');
 
-                  endTime = new Date().getTime();
+                    endTime = new Date().getTime();
 
-                  clearInterval(intervalId);
+                    document.getElementById("strategies").value = JSON.stringify(choices);
+                    document.getElementById("strategy").value = currentStrategy.toString();
+                    document.getElementById("start-time").value = startTime.toString();
+                    document.getElementById("end-time").value = endTime.toString();
+
+                    clearInterval(intervalId);
                 }
             }, loopTimeMilliseconds);
         }

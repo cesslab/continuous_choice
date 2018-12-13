@@ -6,3 +6,19 @@
 #next-button {
     margin-top: 30px;
 }
+
+.grid-container {
+    display: grid;
+    grid-row-gap: 20px;
+}
+
+.game-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.custom-button {
+    width: 230px !important;
+}
+
+

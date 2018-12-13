@@ -28,3 +28,5 @@ class Group(BaseGroup):
 class Player(BasePlayer):
     strategies = models.LongStringField()
     strategy = models.StringField()
+    start = models.StringField()
+    end = models.StringField()
