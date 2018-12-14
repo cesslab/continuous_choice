@@ -33,13 +33,13 @@
                     <tbody>
                     <tr>
                         <th scope="row">A</th>
-                        <td>a, a</td>
-                        <td>a, b</td>
+                        <td>{{ game.row_a.column_a.row_payoff }}, {{ game.row_a.column_a.column_payoff }}</td>
+                        <td>{{ game.row_a.column_b.row_payoff }}, {{ game.row_a.column_b.column_payoff }}</td>
                     </tr>
                     <tr>
                         <th scope="row">B</th>
-                        <td>b, a</td>
-                        <td>b, b</td>
+                        <td>{{ game.row_b.column_a.row_payoff }}, {{ game.row_b.column_a.column_payoff }}</td>
+                        <td>{{ game.row_b.column_b.row_payoff }}, {{ game.row_b.column_b.column_payoff }}</td>
                     </tr>
                     </tbody>
                 </table>
