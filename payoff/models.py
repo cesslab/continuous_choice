@@ -3,18 +3,19 @@ from otree.api import (
     Currency as c, currency_range
 )
 
+from experiment.game import Game, Row, Payoff
 
-author = 'Your name here'
+author = 'Anwar A. RUff'
 
 doc = """
-Your app description
+Payoff Phase
 """
 
 
 class Constants(BaseConstants):
     name_in_url = 'payoff'
     players_per_group = None
-    num_rounds = 1
+    num_rounds = 4
 
 
 class Subsession(BaseSubsession):
