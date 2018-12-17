@@ -3,22 +3,23 @@ from ._builtin import Page, WaitPage
 from .models import Constants
 
 
-class MyPage(Page):
-    pass
+class Game(Page):
+    def vars_for_template(self):
+        obj = self.participant.vars['payment_games'][self.round_number - 1]
+        return {
+            'round': obj['round'],
+            'game': obj['game'],
+            'payoff': obj['payoff'],
+            'move': obj['move']
+        }
 
 
-class ResultsWaitPage(WaitPage):
-
-    def after_all_players_arrive(self):
-        pass
-
-
-class Results(Page):
-    pass
+class FinalPayoff(Page):
+    def is_displayed(self):
+        return self.round_number == Constants.num_rounds
 
 
 page_sequence = [
-    MyPage,
-    ResultsWaitPage,
-    Results
+    Game,
+    FinalPayoff,
 ]
