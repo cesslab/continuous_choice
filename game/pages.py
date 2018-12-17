@@ -18,6 +18,12 @@ class Game(Page):
     def before_next_page(self):
         if (self.round_number - 1) in self.participant.vars['payment_rounds']:
             self.player.set_payoff()
+            self.participant.vars['payment_games'].append({
+                'round': self.round_number,
+                'game': Constants.games[self.round_number-1],
+                'payoff': self.player.payoff,
+                'move': self.player.random_strategy,
+            })
 
 
 
