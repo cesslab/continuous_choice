@@ -11,9 +11,13 @@ class Row:
 
 
 class Game:
-    def __init__(self, row_a: Row, row_b: Row):
+    A = 'A'
+    B = 'B'
+
+    def __init__(self, row_a: Row, row_b: Row, column_move):
         self.row_a = row_a
         self.row_b = row_b
+        self.column_move = column_move
 
 
 
