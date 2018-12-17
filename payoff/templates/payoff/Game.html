@@ -1,0 +1,50 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'game/css/game.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="grid-container">
+        <div class="game-container">
+            <div class="align-middle">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>A</th>
+                        <th>B</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th scope="row">A</th>
+                        <td>{{ game.row_a.column_a.row_payoff }}, {{ game.row_a.column_a.column_payoff }}</td>
+                        <td>{{ game.row_a.column_b.row_payoff }}, {{ game.row_a.column_b.column_payoff }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">B</th>
+                        <td>{{ game.row_b.column_a.row_payoff }}, {{ game.row_b.column_a.column_payoff }}</td>
+                        <td>{{ game.row_b.column_b.row_payoff }}, {{ game.row_b.column_b.column_payoff }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div>
+            <h3>
+                Round {{ round }} was randomly selected for payment. You chose {{ move }} and other player chose {{ game.column_move }}.
+                Your payoff for this round is {{ payoff }}.
+            </h3>
+        </div>
+
+        <div>
+            <button id="next-button" class="otree-btn-next btn btn-dark">Continue</button>
+        </div>
+    </div>
+{% endblock %}
