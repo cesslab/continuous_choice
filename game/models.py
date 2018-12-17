@@ -1,9 +1,14 @@
+import json
+import random
+import numpy as np
+
 from otree.api import (
     models, widgets, BaseConstants, BaseSubsession, BaseGroup, BasePlayer,
     Currency as c, currency_range
 )
 
 from experiment.game import Game, Row, Payoff
+
 
 author = 'Anwar A. Ruff'
 
@@ -61,15 +66,32 @@ class Constants(BaseConstants):
 
 
 class Subsession(BaseSubsession):
-    pass
+    def creating_session(self):
+        if self.round_number == 1:
+            for player in self.get_players():
+                player.participant.vars['payment_rounds'] = np.random.choice(20, 4)
 
 
 class Group(BaseGroup):
     pass
 
 
+
 class Player(BasePlayer):
     strategies = models.LongStringField()
-    strategy = models.StringField()
-    start = models.StringField()
-    end = models.StringField()
+    final_strategy = models.StringField()
+    random_strategy = models.StringField()
+
+    def set_payoff(self):
+        # Column Player Move: A
+        if random.randint(0, 1) == 0:
+            # Row Player Move: A
+            if self.final_strategy == "A":
+                self.payoff = c(Constants.games[self.round_number - 1].row_a.column_a.row_payoff)
+            else:
+                self.payoff = c(Constants.games[self.round_number - 1].row_b.column_a.row_payoff)
+        else:
+            if self.final_strategy == "A":
+                self.payoff = c(Constants.games[self.round_number - 1].row_a.column_b.row_payoff)
+            else:
+                self.payoff = c(Constants.games[self.round_number - 1].row_b.column_b.row_payoff)
