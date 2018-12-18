@@ -7,7 +7,7 @@ from .models import Constants
 
 class Game(Page):
     form_model = 'player'
-    form_fields = ['strategies', 'final_strategy', 'random_strategy']
+    form_fields = ['strategies', 'row_move']
 
     def vars_for_template(self):
         return {
@@ -22,17 +22,9 @@ class Game(Page):
                 'round': self.round_number,
                 'game': Constants.games[self.round_number-1],
                 'payoff': self.player.payoff,
-                'move': self.player.random_strategy,
+                'row_move': self.player.row_move,
+                'column_move': Constants.column_moves[self.round_number - 1]
             })
-
-
-
-
-
-
-
-class Results(Page):
-    pass
 
 
 page_sequence = [
