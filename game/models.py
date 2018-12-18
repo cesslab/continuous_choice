@@ -7,7 +7,7 @@ from otree.api import (
     Currency as c, currency_range
 )
 
-from experiment.game import Game, Row, Payoff
+from experiment.game import Game, Payoff
 
 
 author = 'Anwar A. Ruff'
@@ -21,13 +21,14 @@ class Constants(BaseConstants):
     name_in_url = 'game'
     players_per_group = None
     num_rounds = 3
+    column_moves = [Game.A, Game.B, Game.A]
     games = [
         # PC800, 100
-        Game(Row(Payoff(800, 800), Payoff(100, 100)), Row(Payoff(100, 100), Payoff(500, 500)), Game.A),
+        Game([[Payoff(800, 800), Payoff(100, 100)], [Payoff(100, 100), Payoff(500, 500)]]),
         # BOS 800, 100
-        Game(Row(Payoff(800, 500), Payoff(100, 100)), Row(Payoff(100, 100), Payoff(500, 800)), Game.B),
+        Game([[Payoff(800, 500), Payoff(100, 100)], [Payoff(100, 100), Payoff(500, 800)]]),
         # PD 300
-        Game(Row(Payoff(300, 300), Payoff(100, 400)), Row(Payoff(400, 100), Payoff(200, 200)), Game.A),
+        Game([[Payoff(300, 300), Payoff(100, 400)], [Payoff(400, 100), Payoff(200, 200)]]),
         # # CS 400
         # Game(Row(Payoff(400, 100), Payoff(100, 400)), Row(Payoff(100, 400), Payoff(400, 100)), Game.B),
         # # It Dom
@@ -69,7 +70,7 @@ class Subsession(BaseSubsession):
     def creating_session(self):
         if self.round_number == 1:
             for player in self.get_players():
-                player.participant.vars['payment_rounds'] = np.random.choice(3, 2)
+                player.participant.vars['payment_rounds'] = np.random.choice(3, 2, False)
                 player.participant.vars['payment_games'] = []
 
 
@@ -79,24 +80,9 @@ class Group(BaseGroup):
 
 class Player(BasePlayer):
     strategies = models.LongStringField()
-    final_strategy = models.StringField()
-    random_strategy = models.StringField()
+    row_move = models.IntegerField(choices=[0, 1, 2])
 
     def set_payoff(self):
         game = Constants.games[self.round_number - 1]
-        # Column Player Move: A
-        if self.random_strategy == Game.A:
-            # Row Player Move: A
-            if self.final_strategy == "A":
-                self.payoff = c(game.row_a.column_a.row_payoff)
-            elif self.final_strategy == "B":
-                self.payoff = c(game.row_b.column_a.row_payoff)
-            else:
-                self.payoff = 0
-        else:
-            if self.final_strategy == "A":
-                self.payoff = c(game.row_a.column_b.row_payoff)
-            elif self.final_strategy == "B":
-                self.payoff = c(game.row_b.column_b.row_payoff)
-            else:
-                self.payoff = 0
+        column_move = Constants.column_moves[self.round_number - 1]
+        self.payoff = game.row_payoff(self.row_move, column_move)
