@@ -23,13 +23,13 @@
                     <tbody>
                     <tr>
                         <th scope="row">A</th>
-                        <td>{{ game.row_a.column_a.row_payoff }}, {{ game.row_a.column_a.column_payoff }}</td>
-                        <td>{{ game.row_a.column_b.row_payoff }}, {{ game.row_a.column_b.column_payoff }}</td>
+                        <td>{{ game.row_aa }}, {{ game.column_aa }}</td>
+                        <td>{{ game.row_ab }}, {{ game.column_ab }}</td>
                     </tr>
                     <tr>
                         <th scope="row">B</th>
-                        <td>{{ game.row_b.column_a.row_payoff }}, {{ game.row_b.column_a.column_payoff }}</td>
-                        <td>{{ game.row_b.column_b.row_payoff }}, {{ game.row_b.column_b.column_payoff }}</td>
+                        <td>{{ game.row_ba }}, {{ game.column_ba }}</td>
+                        <td>{{ game.row_bb }}, {{ game.column_bb }}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -38,7 +38,7 @@
 
         <div>
             <h3>
-                Round {{ round }} was randomly selected for payment. You chose {{ move }} and other player chose {{ game.column_move }}.
+                Round {{ round }} was randomly selected for payment. You chose {{ row_move }} and the other player chose {{ column_move }}.
                 Your payoff for this round is {{ payoff }}.
             </h3>
         </div>
