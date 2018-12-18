@@ -1,25 +1,62 @@
+from otree.api import Currency as c
+from typing import List
+
+
 class Payoff:
     def __init__(self, row_payoff, column_payoff):
-        self.row_payoff = row_payoff
-        self.column_payoff = column_payoff
-
-
-class Row:
-    def __init__(self, column_a: Payoff, column_b: Payoff):
-        self.column_a = column_a
-        self.column_b = column_b
+        self.row_payoff = c(row_payoff)
+        self.column_payoff = c(column_payoff)
 
 
 class Game:
-    A = 'A'
-    B = 'B'
+    A = 1
+    B = 2
+    NONE = 0
 
-    def __init__(self, row_a: Row, row_b: Row, column_move):
-        self.row_a = row_a
-        self.row_b = row_b
-        self.column_move = column_move
+    def __init__(self, game: List[List[Payoff]]):
+        self.game = game
 
+    @property
+    def row_aa(self):
+        return self.game[0][0].row_payoff
 
+    @property
+    def row_ab(self):
+        return self.game[0][1].row_payoff
+
+    @property
+    def row_ba(self):
+        return self.game[1][0].row_payoff
+
+    @property
+    def row_bb(self):
+        return self.game[1][1].row_payoff
+
+    @property
+    def column_aa(self):
+        return self.game[0][0].column_payoff
+
+    @property
+    def column_ab(self):
+        return self.game[0][1].column_payoff
+
+    @property
+    def column_ba(self):
+        return self.game[1][0].column_payoff
+
+    @property
+    def column_bb(self):
+        return self.game[1][1].column_payoff
+
+    def row_payoff(self, row_move, column_move):
+        if row_move == Game.NONE or column_move == Game.NONE:
+            return c(0)
+        return self.game[row_move - 1][column_move - 1].row_payoff
+
+    def column_payoff(self, row_move, column_move):
+        if row_move == Game.NONE or column_move == Game.NONE:
+            return c(0)
+        return self.game[row_move - 1][column_move - 1].column_payoff
 
 
 
