@@ -34,13 +34,13 @@
                     <tbody>
                     <tr>
                         <th scope="row">A</th>
-                        <td>{{ game.row_a.column_a.row_payoff }}, {{ game.row_a.column_a.column_payoff }}</td>
-                        <td>{{ game.row_a.column_b.row_payoff }}, {{ game.row_a.column_b.column_payoff }}</td>
+                        <td>{{ game.row_aa }}, {{ game.column_aa }}</td>
+                        <td>{{ game.row_ab }}, {{ game.column_ab }}</td>
                     </tr>
                     <tr>
                         <th scope="row">B</th>
-                        <td>{{ game.row_b.column_a.row_payoff }}, {{ game.row_b.column_a.column_payoff }}</td>
-                        <td>{{ game.row_b.column_b.row_payoff }}, {{ game.row_b.column_b.column_payoff }}</td>
+                        <td>{{ game.row_ba }}, {{ game.column_ba }}</td>
+                        <td>{{ game.row_bb }}, {{ game.column_bb }}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -48,8 +48,8 @@
         </div>
 
         <div>
-            <button id="a-btn" type="button" class="btn btn-primary d-inline custom-button" onclick="addChoice('A')">A</button>
-            <button id="b-btn" type="button" class="btn btn-success d-inline custom-button" onclick="addChoice('B')">B</button>
+            <button id="a-btn" type="button" class="btn btn-primary d-inline custom-button" onclick="addChoice(1)">A</button>
+            <button id="b-btn" type="button" class="btn btn-success d-inline custom-button" onclick="addChoice(2)">B</button>
         </div>
 
         <div>
@@ -57,8 +57,7 @@
         </div>
         <div>
             <input type="hidden" id="strategies" name="strategies">
-            <input type="hidden" id="final_strategy" name="final_strategy">
-            <input type="hidden" id="random_strategy" name="random_strategy">
+            <input type="hidden" id="row_move" name="row_move">
         </div>
         <div>{{ form.errors }}</div>
 
@@ -68,6 +67,9 @@
 {% block scripts %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.js"></script>
     <script>
+        const NONE = 0;
+        const A = 1;
+        const B = 2;
         const TIME_GIVEN = 60;
         let loopTimeMilliseconds = 100;
         let millisecondCounter = 0;
@@ -76,19 +78,19 @@
         let startTime = 0;
         let endTime = 0;
         let choices = [];
-        let currentStrategy = 'None';
+        let currentStrategy = 0;
         let barId = 0;
 
         function getRandomStrategy() {
             let randomTime = Math.random()*TIME_GIVEN;
             if (choices.length === 0) {
-               return "None";
+               return NONE;
             }
             else {
                 for (let i = 0; i < choices.length; ++i) {
                     if (randomTime < choices[i].time) {
                         if (i === 0) {
-                            return "None";
+                            return NONE;
                         }
                         else {
                             return choices[i-1].strategy;
@@ -112,7 +114,7 @@
             progressBarCounter = 0;
 
             let strategyLabel = document.getElementById('strategy-choice');
-            strategyLabel.textContent = currentStrategy;
+            strategyLabel.textContent = (currentStrategy === A) ? 'A' : 'B';
             choices.push({strategy: currentStrategy, time: (currentTime - startTime) / 1000});
         }
 
@@ -123,10 +125,10 @@
                     startTime = new Date().getTime();
 
                 let progressBar = document.getElementById(`bid-${barId}`);
-                if (progressBarCounter === 0 && currentStrategy !== 'None') {
+                if (progressBarCounter === 0 && currentStrategy !== NONE) {
                     progressBarCounter += 100;
                     let progressBar = document.getElementById('progbar');
-                    let colorClass = currentStrategy === 'A' ? 'bg-primary': 'bg-success';
+                    let colorClass = currentStrategy === A ? 'bg-primary': 'bg-success';
                     let htmlText = `<div id="bid-${barId}" class="progress-bar ${colorClass}" role="progressbar" style="width: 0%"></div>`;
                     progressBar.insertAdjacentHTML('beforeend', htmlText);
                 }
@@ -150,8 +152,7 @@
                     endTime = new Date().getTime();
 
                     document.getElementById("strategies").value = JSON.stringify(choices);
-                    document.getElementById("final_strategy").value = currentStrategy.toString();
-                    document.getElementById("random_strategy").value = getRandomStrategy();
+                    document.getElementById("row_move").value = getRandomStrategy();
 
                     clearInterval(intervalId);
                 }
