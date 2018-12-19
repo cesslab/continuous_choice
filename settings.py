@@ -4,24 +4,24 @@ from os import environ
 # in SESSION_CONFIGS, except those that explicitly override it.
 # the session config can be accessed from methods in your apps as self.session.config,
 # e.g. self.session.config['participation_fee']
-mturk_hit_settings = {
-    'keywords': ['bonus', 'study'],
-    'title': 'Continuous Choice',
-    'description': 'Experiment in decision making',
-    'frame_height': 500,
-    'preview_template': 'global/MTurkPreview.html',
-    'minutes_allotted_per_assignment': 60,
-    'expiration_hours': 7*24, # 7 days
-    #'grant_qualification_id': 'YOUR_QUALIFICATION_ID_HERE',# to prevent retakes
-    'qualification_requirements': []
-}
+# mturk_hit_settings = {
+#     'keywords': ['bonus', 'study'],
+#     'title': 'Continuous Choice',
+#     'description': 'Experiment in decision making',
+#     'frame_height': 500,
+#     'preview_template': 'global/MTurkPreview.html',
+#     'minutes_allotted_per_assignment': 60,
+#     'expiration_hours': 7*24, # 7 days
+#     #'grant_qualification_id': 'YOUR_QUALIFICATION_ID_HERE',# to prevent retakes
+#     'qualification_requirements': []
+# }
 
 
 SESSION_CONFIG_DEFAULTS = {
     'real_world_currency_per_point': 0.01,
     'participation_fee': 0.00,
     'doc': "",
-    'mturk_hit_settings': mturk_hit_settings,
+    # 'mturk_hit_settings': mturk_hit_settings,
 }
 
 SESSION_CONFIGS = [
@@ -74,5 +74,5 @@ SECRET_KEY = environ.get('SECRET_KEY')
 # if an app is included in SESSION_CONFIGS, you don't need to list it here
 INSTALLED_APPS = ['otree']
 
-AWS_ACCESS_KEY_ID = environ.get('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = environ.get('AWS_SECRET_ACCESS_KEY')
+# AWS_ACCESS_KEY_ID = environ.get('AWS_ACCESS_KEY_ID')
+# AWS_SECRET_ACCESS_KEY = environ.get('AWS_SECRET_ACCESS_KEY')
