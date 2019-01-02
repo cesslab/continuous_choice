@@ -22,7 +22,10 @@ class Constants(BaseConstants):
     players_per_group = None
     num_rounds = 20
     payment_rounds = 4
-    column_moves = [Game.A, Game.B, Game.A, Game.B]
+    column_moves = [
+        Game.A, Game.B, Game.A, Game.A, Game.A, Game.A, Game.B, Game.B, Game.A, Game.B, Game.B, Game.A,
+        Game.B, Game.B, Game.B, Game.A, Game.A, Game.A, Game.A, Game.B]
+
     games = [
         # PC800, 100
         Game([[Payoff(800, 800), Payoff(100, 100)], [Payoff(100, 100), Payoff(500, 500)]]),
