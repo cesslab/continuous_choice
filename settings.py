@@ -39,7 +39,7 @@ SESSION_CONFIGS = [
        'name': 'continuous_choice',
        'display_name': 'Continuous Choice',
        'num_demo_participants': 2,
-       'app_sequence': ['game', 'payoff'],
+       'app_sequence': ['practice', 'game', 'payoff'],
     },
 ]
 
