@@ -13,7 +13,7 @@ Payoff Phase
 class Constants(BaseConstants):
     name_in_url = 'payoff'
     players_per_group = None
-    num_rounds = 4
+    num_rounds = 1
 
 
 class Subsession(BaseSubsession):
