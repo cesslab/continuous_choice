@@ -58,6 +58,7 @@
         <div>
             <input type="hidden" id="strategies" name="strategies">
             <input type="hidden" id="row_move" name="row_move">
+            <input type="hidden" id="random_time" name="random_time">
         </div>
         <div>{{ form.errors }}</div>
 
@@ -81,10 +82,9 @@
         let currentStrategy = 0;
         let barId = 0;
 
-        function getRandomStrategy() {
-            let randomTime = Math.random()*TIME_GIVEN;
+        function getStrategy(randomTime) {
             if (choices.length === 0) {
-               return NONE;
+                return NONE;
             }
             else {
                 for (let i = 0; i < choices.length; ++i) {
@@ -103,6 +103,7 @@
             }
         }
 
+
         function addChoice(strat) {
             let currentTime = new Date().getTime();
 
@@ -116,6 +117,10 @@
             let strategyLabel = document.getElementById('strategy-choice');
             strategyLabel.textContent = (currentStrategy === A) ? 'A' : 'B';
             choices.push({strategy: currentStrategy, time: (currentTime - startTime) / 1000});
+        }
+
+        function getRndInteger(min, max) {
+            return Math.floor(Math.random() * (max - min) ) + min;
         }
 
         $(document).ready(function() {
@@ -152,7 +157,9 @@
                     endTime = new Date().getTime();
 
                     document.getElementById("strategies").value = JSON.stringify(choices);
-                    document.getElementById("row_move").value = getRandomStrategy();
+                    let randomTime = getRndInteger(0, TIME_GIVEN);
+                    document.getElementById("random_time").value = randomTime;
+                    document.getElementById("row_move").value = getStrategy(randomTime);
 
                     clearInterval(intervalId);
                 }

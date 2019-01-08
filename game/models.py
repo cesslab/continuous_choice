@@ -85,6 +85,7 @@ class Group(BaseGroup):
 class Player(BasePlayer):
     strategies = models.LongStringField()
     row_move = models.IntegerField(choices=[0, 1, 2])
+    random_time = models.IntegerField(min=0, max=60)
 
     def set_payoff(self):
         game = Constants.games[self.round_number - 1]
