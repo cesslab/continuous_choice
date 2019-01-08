@@ -9,42 +9,19 @@
 {% endblock %}
 
 {% block content %}
-    <div class="grid-container">
-        <div class="game-container">
-            <div class="align-middle">
-                <table class="table table-bordered">
-                    <thead>
-                    <tr>
-                        <th></th>
-                        <th>A</th>
-                        <th>B</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <th scope="row">A</th>
-                        <td>{{ game.row_aa }}, {{ game.column_aa }}</td>
-                        <td>{{ game.row_ab }}, {{ game.column_ab }}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">B</th>
-                        <td>{{ game.row_ba }}, {{ game.column_ba }}</td>
-                        <td>{{ game.row_bb }}, {{ game.column_bb }}</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div>
-            <h3>
-                Round {{ round }} was randomly selected for payment. You chose {{ row_move }} and the other player chose {{ column_move }}.
-                Your payoff for this round is {{ payoff }}.
-            </h3>
-        </div>
-
+    <div>
+    {% for game in games %}
+        <p>Game {{ game.round }} was random selected. Second {{ game.random_time }} was randomly selected, during which
+            {% if game.row_move == 'None' %}
+                you had not yet selected a choice.
+            {% else %}
+                your choice was {{ game.row_move }}.
+            {% endif %}
+            The randomly selected column player's choice was {{ game.column_move }}. The payoff for this game been, had it been
+            chosen for payment, would have been {{ game.payoff }}, or {{ game.payoff_dollars }}.</p>
+    {% endfor %}
+    </div>
         <div>
             <button id="next-button" class="otree-btn-next btn btn-dark">Continue</button>
         </div>
-    </div>
 {% endblock %}
