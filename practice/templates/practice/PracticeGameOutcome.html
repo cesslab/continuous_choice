@@ -1,0 +1,20 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Practice Outcome
+{% endblock %}
+
+{% block content %}
+    <p>Second {{ random_time }} was randomly selected, during which
+        {% if row_move == 'None' %}
+            you had not yet selected a choice.
+        {% else %}
+            your choice was {{ row_move }}.
+        {% endif %}
+         The randomly selected column player's choice was {{ column_move }}. The payoff for this game been, had it been
+    chosen for payment, would have been {{ payoff }}, or {{ payoff_dollars }}.</p>
+    {% next_button %}
+{% endblock %}
+
+

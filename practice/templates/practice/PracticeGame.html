@@ -1,0 +1,170 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+   Practice Game
+{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'game/css/game.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="grid-container">
+        <div>
+            <h3><span>Seconds Remaining: </span><span id="ttext">60</span></h3>
+        </div>
+
+        <div><h3 class="d-inline">Current Choice: </h3><h3 class="d-inline" id="strategy-choice"></h3></div>
+        <div id="progbar" class="progress">
+            <div class="progress-bar bg-white" id="bid-0" role="progressbar">
+            </div>
+        </div>
+
+        <div class="game-container">
+            <div class="align-middle">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>A</th>
+                        <th>B</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th scope="row">A</th>
+                        <td>{{ game.row_aa }}, {{ game.column_aa }}</td>
+                        <td>{{ game.row_ab }}, {{ game.column_ab }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">B</th>
+                        <td>{{ game.row_ba }}, {{ game.column_ba }}</td>
+                        <td>{{ game.row_bb }}, {{ game.column_bb }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div>
+            <button id="a-btn" type="button" class="btn btn-primary d-inline custom-button" onclick="addChoice(1)">A</button>
+            <button id="b-btn" type="button" class="btn btn-success d-inline custom-button" onclick="addChoice(2)">B</button>
+        </div>
+
+        <div>
+            <button id="next-button" class="otree-btn-next btn btn-dark d-none">Continue</button>
+        </div>
+        <div>
+            <input type="hidden" id="strategies" name="strategies">
+            <input type="hidden" id="row_move" name="row_move">
+            <input type="hidden" id="random_time" name="random_time">
+        </div>
+        <div>{{ form.errors }}</div>
+
+    </div>
+
+{% endblock %}
+{% block scripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.js"></script>
+    <script>
+        const NONE = 0;
+        const A = 1;
+        const B = 2;
+        const TIME_GIVEN = 60;
+        let loopTimeMilliseconds = 100;
+        let millisecondCounter = 0;
+        let timeGivenMilliseconds = TIME_GIVEN * 1000;
+        let progressBarCounter = 0;
+        let startTime = 0;
+        let endTime = 0;
+        let choices = [];
+        let currentStrategy = 0;
+        let barId = 0;
+
+        function getStrategy(randomTime) {
+            if (choices.length === 0) {
+               return NONE;
+            }
+            else {
+                for (let i = 0; i < choices.length; ++i) {
+                    if (randomTime < choices[i].time) {
+                        if (i === 0) {
+                            return NONE;
+                        }
+                        else {
+                            return choices[i-1].strategy;
+                        }
+                    }
+                    else if (randomTime === choices[i].time || i === (choices.length - 1)) {
+                        return choices[i].strategy;
+                    }
+                }
+            }
+        }
+
+        function addChoice(strat) {
+            let currentTime = new Date().getTime();
+
+            if (currentStrategy === strat) {
+                return;
+            }
+            currentStrategy = strat;
+            barId += 1;
+            progressBarCounter = 0;
+
+            let strategyLabel = document.getElementById('strategy-choice');
+            strategyLabel.textContent = (currentStrategy === A) ? 'A' : 'B';
+            choices.push({strategy: currentStrategy, time: (currentTime - startTime) / 1000});
+        }
+
+        function getRndInteger(min, max) {
+          return Math.floor(Math.random() * (max - min) ) + min;
+        }
+
+        $(document).ready(function() {
+            let timeElement = document.getElementById('ttext');
+            const intervalId = setInterval(() => {
+                if (millisecondCounter === 0)
+                    startTime = new Date().getTime();
+
+                let progressBar = document.getElementById(`bid-${barId}`);
+                if (progressBarCounter === 0 && currentStrategy !== NONE) {
+                    progressBarCounter += 100;
+                    let progressBar = document.getElementById('progbar');
+                    let colorClass = currentStrategy === A ? 'bg-primary': 'bg-success';
+                    let htmlText = `<div id="bid-${barId}" class="progress-bar ${colorClass}" role="progressbar" style="width: 0%"></div>`;
+                    progressBar.insertAdjacentHTML('beforeend', htmlText);
+                }
+                else {
+                    progressBarCounter += 100;
+                    barPercent = ( progressBarCounter / timeGivenMilliseconds) * 100;
+                    progressBar.setAttribute('style', `width:${barPercent}%;`);
+                }
+
+                millisecondCounter += 100;
+                let seconds = Math.ceil((timeGivenMilliseconds - millisecondCounter)/ 1000);
+                timeElement.textContent = `${seconds}`;
+
+                if (millisecondCounter === timeGivenMilliseconds) {
+                    document.getElementById('a-btn').classList.remove('d-inline');
+                    document.getElementById('a-btn').classList.add('d-none');
+                    document.getElementById('b-btn').classList.remove('d-inline');
+                    document.getElementById('b-btn').classList.add('d-none');
+                    document.getElementById('next-button').classList.remove('d-none');
+
+                    endTime = new Date().getTime();
+
+                    document.getElementById("strategies").value = JSON.stringify(choices);
+                    let randomTime = getRndInteger(0, TIME_GIVEN);
+                    document.getElementById("random_time").value = randomTime;
+                    document.getElementById("row_move").value = getStrategy(randomTime);
+
+                    clearInterval(intervalId);
+                }
+            }, loopTimeMilliseconds);
+        }
+    );
+
+</script>
+{% endblock %}

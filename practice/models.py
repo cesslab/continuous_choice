@@ -33,8 +33,10 @@ class Group(BaseGroup):
 class Player(BasePlayer):
     strategies = models.LongStringField()
     row_move = models.IntegerField(choices=[0, 1, 2])
+    random_time = models.IntegerField(min=0, max=60)
 
-    def get_payoff(self):
+    def set_payoff(self):
         game = Constants.games[self.round_number - 1]
         column_move = Constants.column_moves[self.round_number - 1]
-        return game.row_payoff(self.row_move, column_move)
+        self.payoff = game.row_payoff(self.row_move, column_move)
+
