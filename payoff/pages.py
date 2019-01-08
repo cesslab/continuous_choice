@@ -16,6 +16,8 @@ class GameOutcome(Page):
                 'random_time': game['random_time'],
                 'row_move': move_label[game['row_move']],
                 'column_move': move_label[game['column_move']],
+                'payoff_dollars': game['payoff'].to_real_world_currency(self.session),
+                'g': game,
             })
 
         return data
