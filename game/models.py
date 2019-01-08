@@ -23,8 +23,11 @@ class Constants(BaseConstants):
     num_rounds = 20
     payment_rounds = 4
     column_moves = [
-        Game.A, Game.B, Game.A, Game.A, Game.A, Game.A, Game.B, Game.B, Game.A, Game.B, Game.B, Game.A,
-        Game.B, Game.B, Game.B, Game.A, Game.A, Game.A, Game.A, Game.B]
+        Game.A, Game.B, Game.A, Game.A, Game.A,
+        Game.A, Game.B, Game.B, Game.A, Game.B,
+        Game.B, Game.A, Game.B, Game.B, Game.B,
+        Game.A, Game.A, Game.A, Game.A, Game.B
+    ]
 
     games = [
         # PC800, 100
