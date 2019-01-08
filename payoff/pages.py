@@ -6,14 +6,19 @@ from .models import Constants
 class GameOutcome(Page):
     def vars_for_template(self):
         move_label = {0: 'None', 1: 'A', 2: 'B'}
-        obj = self.participant.vars['payment_games'][self.round_number - 1]
-        return {
-            'round': obj['round'],
-            'game': obj['game'],
-            'payoff': obj['payoff'],
-            'row_move': move_label[obj['row_move']],
-            'column_move': move_label[obj['column_move']],
-        }
+
+        data = {'games': []}
+        for i, game in enumerate(self.participant.vars['payment_games']):
+            data['games'].append({
+                'round': game['round'],
+                'game': game['game'],
+                'payoff': game['payoff'],
+                'random_time': game['random_time'],
+                'row_move': move_label[game['row_move']],
+                'column_move': move_label[game['column_move']],
+            })
+
+        return data
 
 
 class FinalPayoff(Page):
