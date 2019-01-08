@@ -15,14 +15,6 @@ class PracticeGame(Page):
 
     def before_next_page(self):
             self.player.set_payoff()
-            self.participant.vars['payment_games'].append({
-                'round': self.round_number,
-                'game': Constants.games[0],
-                'payoff': self.player.payoff,
-                'row_move': self.player.row_move,
-                'column_move': Constants.column_moves[0]
-            })
-
 
 class PracticeGameOutcome(Page):
     def vars_for_template(self):
