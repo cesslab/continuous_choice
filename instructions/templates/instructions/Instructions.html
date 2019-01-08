@@ -1,0 +1,129 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Instructions
+{% endblock %}
+
+{% block content %}
+    <div>
+        <p>This is an experiment in two-person decision making. You will be able to earn more money depending on the
+            decisions you make in the experiment and the decisions made by others.</p>
+        <p>There will be 20 rounds in the experiment, each round lasting for 1 minute. In each round you will be
+            presented with a two-person decision problem (or game) in which you will be asked to choose between two
+            actions labeled A and B. You will face another person who also will be choosing between two actions A and B
+            and depending on your choice and that of your pair member, each of you will earn money.</p>
+        <p>To illustrate what a decision problem will look like, consider Table 1 below. (This is just a hypothetical
+            example; the payoffs in your decision problems will not be for the amounts portrayed here):</p>
+    </div>
+    <div class="game-container">
+        <div class="align-middle">
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th style="text-align: center; vertical-align: middle;" colspan="3">Your Opponent's Decision</th>
+                </tr>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th>A</th>
+                    <th>B</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th style="text-align: center; vertical-align: middle;" rowspan="3">Your Decision</th>
+                    <th scope="row">A</th>
+                    <td>1000, 225</td>
+                    <td>5, 25000</td>
+                </tr>
+                <tr>
+                    <th scope="row">B</th>
+                    <td>80, 10,000</td>
+                    <td>225, 10,000</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <p>
+                In this and every other decision problem you will be the player choosing the rows and your opponent will
+                choose the columns. In this game you have two choices: Row A and Row B. The entries in the table
+                describe your payoff and that of your opponent in points, depending on the choice both of you make.
+                These points will be converted into dollars at the end of the experiment at the rate of 1 point = $
+                {{ session.config.real_world_currency_per_point }}. For example, say that you and your opponent both
+                make choice A. Then the cell in the upper left
+                hand corner of the table is relevant since it is the cell in the table associated with the choice if A
+                for both you and your opponent. In this cell you see two dollar amounts, 1000 points and 225 points. The
+                first payoff on the left is your (the Row chooser’s) payoff (1000), while the payoff to the right (225)
+                is the payoff to the column chooser, your opponent. The same is true for all the other cells which are
+                relevant when different choices are made: the first payoff is your payoff while the second payoff is
+                that of your opponent’s. For example, if you choose Row B and your opponent chooses Column A, then the
+                cell in the lower left hand corner of the table is relevant and you will receive a payoff of 80 points
+                while your opponent will receive a payoff of 10,000 points.
+            </p>
+            <p>
+                In each round of the experiment, after you hit a button to start that round, you will have a new
+                decision problem (game) placed on the screen and it will remain on the screen for 1 minute. At each
+                instant during that minute we ask you to think of what choice you would like to make (Row A or Row B).
+                To enter your decision hit the A or B button placed below the decision problem. Put differently, as you
+                look at the game during the 1 minute you have you may start out thinking that a particular decision is
+                best but later change your mind about which row to choose. We will allow you to change your mind by
+                hitting the button associated with what you consider to be the better choice. At the end of the minute,
+                however, instead of using your last decision as your final choice, we will choose one instant (one
+                second) at random and enter the choice you made at that second as your payoff-relevant choice for the
+                game to be used against the choice of your opponent.
+            </p>
+            <p>
+                In each round of the experiment, after you hit a button to start that round, you will have a new
+                decision problem (game) placed on the screen and it will remain on the screen for 1 minute. At each
+                instant during that minute we ask you to think of what choice you would like to make (Row A or Row B).
+                To enter your decision hit the A or B button placed below the decision problem. Put differently, as you
+                look at the game during the 1 minute you have you may start out thinking that a particular decision is
+                best but later change your mind about which row to choose. We will allow you to change your mind by
+                hitting the button associated with what you consider to be the better choice. At the end of the minute,
+                however, instead of using your last decision as your final choice, we will choose one instant (one
+                second) at random and enter the choice you made at that second as your payoff-relevant choice for the
+                game to be used against the choice of your opponent.
+            </p>
+            <p>
+                <b>
+                    Because the computer will choose one second in the 1 minute interval and look at the choice you made
+                    there to determine your payoff, it is in your interest at every second to make sure that you enter
+                    the row that you think is best given your deliberations. So always make sure you have entered that
+                    decision that you think is best as time goes on. You are free to change your mind as time proceeds.
+                </b>
+            </p>
+            <p>There are several things to note about this experiment.</p>
+            <ol>
+                <li>If at any time you do not have a decision entered and the computer chooses that time as payoff
+                    relevant, then you will receive a zero payoff in that game. This is only relevant at the very
+                    beginning of the round before you have made your very first choice. For example, say you take 3
+                    seconds to make your first choice and the computer chooses your decision at second 2 as the
+                    payoff-relevant one. Since at that time you had not made a choice, you will get zero dollars for
+                    that game. To avoid such a thing happening, we urge you to make a first decision as fast as you can
+                    when a new round starts so as to avoid a zero payoff. You can change it at any time if you want to.
+                </li>
+                <li>The opponent you face will be taken from a set of randomly chosen people who played these games
+                    without any time limit but who made only one choice and did not have to decide, as you do, during 1
+                    minute. So for each such game your opponent thought about the game and made one choice of a column.
+                    Your decision of a row will be matched with their column choice.
+                </li>
+                <li>Between rounds we will not tell you what your payoff is. You will have to finish all 20 rounds
+                    before we tell you your payoffs.
+                </li>
+                <li>Finally, although you engage in 20 decision problems, we will randomly choose 4 of those problems as
+                    relevant for your payoff. For each game we choose we will match your decision (as described above)
+                    with that of your opponent and you will receive the sum of your payoffs in those games as your final
+                    payoff in the experiment. In addition, you will be paid a fixed fee of {{ session.config.participation_fee }} as posted on the
+                    advertisement about this experiment.
+                </li>
+            </ol>
+            <p><b>To get you familiar with the experiment we will first have you engage in a practice round where you will have 1 minute to think about your strategy and enter it by hitting the A or B button as any time as your thinking progresses. Don’t forget that in the real experiment you must be sure to quickly enter your first decision so as to avoid getting a zero payoff.</b></p>
+        </div>
+    </div>
+
+    {% next_button %}
+
+{% endblock %}
