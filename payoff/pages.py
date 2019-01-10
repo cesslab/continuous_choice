@@ -19,24 +19,11 @@ class GameOutcome(Page):
                 'payoff_dollars': game['payoff'].to_real_world_currency(self.session),
             })
 
+            data['final_payoff'] = self.participant.payoff.to_real_world_currency(self.session)
+
         return data
 
 
-class FinalPayoff(Page):
-    def is_displayed(self):
-        return self.round_number == Constants.num_rounds
-
-    def vars_for_template(self):
-        return {'final_payoff': self.participant.payoff.to_real_world_currency(self.session)}
-
-
-class Message(Page):
-    def is_displayed(self):
-        return self.round_number == 1
-
-
 page_sequence = [
-    Message,
     GameOutcome,
-    FinalPayoff,
 ]
