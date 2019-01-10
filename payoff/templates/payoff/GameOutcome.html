@@ -2,6 +2,7 @@
 {% load otree static %}
 
 {% block title %}
+    Outcome
 {% endblock %}
 
 {% block styles %}
@@ -10,23 +11,28 @@
 
 {% block content %}
     <div>
-        <p>The computer has randomly chosen the following four games. For each game a second was randomly selected to determine
+        <p>The computer has randomly four games. For each game a second was randomly selected to determine
             your choice. A column player for that game was also chosen at random. Their move for the corresponding games will
             be displayed along with your move.</p>
     </div>
     <div>
         {% for game in games %}
-            <p>Game {{ game.round }} was random selected. Second {{ game.random_time }} was randomly selected, during
+            <p><b>Game {{ game.round }}</b> was random selected. <b>Second {{ game.random_time }}</b> was randomly selected, during
                 which
                 {% if game.row_move == 'None' %}
-                    you had not yet selected a choice.
+                    <b>you had not yet selected a choice</b>.
                 {% else %}
-                    your choice was {{ game.row_move }}.
+                    <b>your choice was {{ game.row_move }}</b>.
                 {% endif %}
-                The randomly selected column player's choice was {{ game.column_move }}. The payoff for this game been,
+                The randomly selected <b>column player's choice was {{ game.column_move }}</b>. The payoff for this game been,
                 had it been
-                chosen for payment, would have been {{ game.payoff }}, or {{ game.payoff_dollars }}.</p>
+                chosen for payment, would have been <b>{{ game.payoff }}</b>, or <b>{{ game.payoff_dollars }}</b>.</p>
         {% endfor %}
+    </div>
+    <div>
+        <p>
+            <b>Your final payoff is {{ final_payoff }}.</b>
+        </p>
     </div>
     <div>
         <button id="next-button" class="otree-btn-next btn btn-dark">Continue</button>
