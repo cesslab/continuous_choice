@@ -1,0 +1,19 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Experiment
+{% endblock %}
+
+{% block content %}
+    <p>You will now begin the experiment, which will consist of 20 rounds lasting for 1 minute each.
+        In each round you will be presented with a two-person decision problem (or game) in which
+        you will be asked to choose between two actions labeled A and B. You will face another person
+        who also will be choosing between two actions A and B and depending on your choice and that of your pair member,
+        each of you will earn money.</p>
+
+    <p>Please click on the next button to begin the first round.</p>
+    {% next_button %}
+{% endblock %}
+
+

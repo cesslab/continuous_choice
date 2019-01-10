@@ -5,6 +5,12 @@ from ._builtin import Page, WaitPage
 from .models import Constants
 
 
+class GameInfo(Page):
+
+    def is_displayed(self):
+        return self.round_number == 1
+
+
 class Game(Page):
     form_model = 'player'
     form_fields = ['strategies', 'row_move', 'random_time']
@@ -29,5 +35,6 @@ class Game(Page):
 
 
 page_sequence = [
+    GameInfo,
     Game
 ]
