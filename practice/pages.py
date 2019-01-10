@@ -3,6 +3,10 @@ from ._builtin import Page, WaitPage
 from .models import Constants
 
 
+class PracticeInfo(Page):
+    pass
+
+
 class PracticeGame(Page):
     form_model = 'player'
     form_fields = ['strategies', 'row_move', 'random_time']
@@ -15,6 +19,7 @@ class PracticeGame(Page):
 
     def before_next_page(self):
             self.player.set_payoff()
+
 
 class PracticeGameOutcome(Page):
     def vars_for_template(self):
@@ -31,6 +36,7 @@ class PracticeGameOutcome(Page):
 
 
 page_sequence = [
+    PracticeInfo,
     PracticeGame,
     PracticeGameOutcome
 ]
