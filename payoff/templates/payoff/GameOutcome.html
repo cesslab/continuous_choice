@@ -10,18 +10,25 @@
 
 {% block content %}
     <div>
-    {% for game in games %}
-        <p>Game {{ game.round }} was random selected. Second {{ game.random_time }} was randomly selected, during which
-            {% if game.row_move == 'None' %}
-                you had not yet selected a choice.
-            {% else %}
-                your choice was {{ game.row_move }}.
-            {% endif %}
-            The randomly selected column player's choice was {{ game.column_move }}. The payoff for this game been, had it been
-            chosen for payment, would have been {{ game.payoff }}, or {{ game.payoff_dollars }}.</p>
-    {% endfor %}
+        <p>The computer has randomly chosen the following four games. For each game a second was randomly selected to determine
+            your choice. A column player for that game was also chosen at random. Their move for the corresponding games will
+            be displayed along with your move.</p>
     </div>
-        <div>
-            <button id="next-button" class="otree-btn-next btn btn-dark">Continue</button>
-        </div>
+    <div>
+        {% for game in games %}
+            <p>Game {{ game.round }} was random selected. Second {{ game.random_time }} was randomly selected, during
+                which
+                {% if game.row_move == 'None' %}
+                    you had not yet selected a choice.
+                {% else %}
+                    your choice was {{ game.row_move }}.
+                {% endif %}
+                The randomly selected column player's choice was {{ game.column_move }}. The payoff for this game been,
+                had it been
+                chosen for payment, would have been {{ game.payoff }}, or {{ game.payoff_dollars }}.</p>
+        {% endfor %}
+    </div>
+    <div>
+        <button id="next-button" class="otree-btn-next btn btn-dark">Continue</button>
+    </div>
 {% endblock %}
