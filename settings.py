@@ -12,13 +12,13 @@ mturk_hit_settings = {
     'preview_template': 'global/MTurkPreview.html',
     'minutes_allotted_per_assignment': 60,
     'expiration_hours': 7*24, # 7 days
-    'grant_qualification_id': '3E3LRXDRZ1XIKG22JQOPZB2ZKX25YB',# to prevent retakes
+    # 'grant_qualification_id': '3E3LRXDRZ1XIKG22JQOPZB2ZKX25YB',# to prevent retakes
     'qualification_requirements': [
-        {
-            'QualificationTypeId': "00000000000000000071",
-            'Comparator': "EqualTo",
-            'LocaleValues': [{'Country': "US"}]
-        },
+        # {
+        #     'QualificationTypeId': "00000000000000000071",
+        #     'Comparator': "EqualTo",
+        #     'LocaleValues': [{'Country': "US"}]
+        # },
         {
             'QualificationTypeId': "3E3LRXDRZ1XIKG22JQOPZB2ZKX25YB",
             'Comparator': "DoesNotExist",
