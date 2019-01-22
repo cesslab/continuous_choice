@@ -18,6 +18,7 @@ class Game(Page):
     def vars_for_template(self):
         return {
             'game': Constants.games[self.round_number-1],
+            'num_rounds': Constants.num_rounds,
             'round': self.round_number,
         }
 
