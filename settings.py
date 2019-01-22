@@ -28,7 +28,7 @@ from os import environ
 
 
 SESSION_CONFIG_DEFAULTS = {
-    'real_world_currency_per_point': 0.01,
+    'real_world_currency_per_point': 0.0075,
     'participation_fee': 7.00,  #HIT
     'doc': "",
     # 'mturk_hit_settings': mturk_hit_settings,
