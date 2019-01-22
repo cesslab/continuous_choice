@@ -2,18 +2,23 @@
 {% load otree static %}
 
 {% block title %}
-    Practice Outcome
+    Practice Round Results
 {% endblock %}
 
 {% block content %}
-    <p>Second {{ random_time }} was randomly selected, during which
-        {% if row_move == 'None' %}
-            you had not yet selected a choice.
-        {% else %}
-            your choice was {{ row_move }}.
-        {% endif %}
-         The randomly selected column player's choice was {{ column_move }}. The payoff for this game would have been {{ payoff }}, or {{ payoff_dollars }}.</p>
-    {% next_button %}
+    <div>
+        <p>Second {{ random_time }} was randomly selected, during which
+            {% if row_move == 'None' %}
+                you had not yet selected a choice.
+            {% else %}
+                your choice was {{ row_move }}.
+            {% endif %}
+            The randomly selected column player's choice was {{ column_move }}. The payoff for this game would have been {{ payoff }}, or {{ payoff_dollars }}.</p>
+    </div>
+    <div>
+        <p><b>Click on the next button to proceed to the experiment.</b></p>
+        <button class="btn btn-primary">Next</button>
+    </div>
 {% endblock %}
 
 

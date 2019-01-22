@@ -24,9 +24,8 @@
                 {% else %}
                     <b>your choice was {{ game.row_move }}</b>.
                 {% endif %}
-                The randomly selected <b>column player's choice was {{ game.column_move }}</b>. The payoff for this game been,
-                had it been
-                chosen for payment, would have been <b>{{ game.payoff }}</b>, or <b>{{ game.payoff_dollars }}</b>.</p>
+                The randomly selected <b>column player's choice was {{ game.column_move }}</b>. The payoff for this game
+                is <b>{{ game.payoff }}</b>, or <b>{{ game.payoff_dollars }}</b>.</p>
         {% endfor %}
     </div>
     <div>

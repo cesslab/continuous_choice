@@ -52,8 +52,13 @@
             <button id="b-btn" type="button" class="btn btn-success d-inline custom-button" onclick="addChoice(2)">B</button>
         </div>
 
-        <div>
-            <button id="next-button" class="otree-btn-next btn btn-dark d-none">Continue</button>
+        <div id="next-button" class="d-none">
+            {% if round < num_rounds %}
+                <p><b>Click on the next button to proceed to the following round.</b></p>
+            {% else %}
+                <p><b>Click next to proceed to the outcome screen.</b></p>
+            {% endif %}
+            <button class="otree-btn-next btn btn-dark">Next</button>
         </div>
         <div>
             <input type="hidden" id="strategies" name="strategies">
