@@ -52,7 +52,12 @@ LANGUAGE_CODE = 'en'
 REAL_WORLD_CURRENCY_CODE = 'USD'
 USE_POINTS = True
 
-ROOMS = []
+ROOMS = [
+    {
+        'name': 'cess_lab',
+        'display_name': 'CESS Lab',
+    },
+]
 
 
 # AUTH_LEVEL:
